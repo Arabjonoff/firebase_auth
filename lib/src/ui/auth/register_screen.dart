@@ -8,16 +8,19 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
   @override
-  void dispose(){
+  void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
+
+  bool isLogin = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 height: 16,
               ),
               Padding(
-                padding:  EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: MaterialButton(
                   color: Colors.indigo,
                   onPressed: sigInUp,
@@ -84,13 +87,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future sigInUp() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context)=> const Center(child:  CircularProgressIndicator(),),
+    );
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-    }on FirebaseAuthException catch(e){
-      print(e);
+    } on FirebaseAuthException catch (e) {
+     showDialog(context: context, builder: (context){
+       return SnackBar(content: Text(e.toString()));
+     });
     }
+
   }
 }

@@ -91,6 +91,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: 'No Account?',
                     children: [
                       TextSpan(
+                          recognizer: TapGestureRecognizer()..onTap = () {
+                            // Single tapped.
+                          },
                         text: 'Sign Up'
                       )
                     ],
